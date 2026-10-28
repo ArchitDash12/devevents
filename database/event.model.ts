@@ -244,7 +244,11 @@ EventSchema.pre("save", async function (this: EventDocument) {
 
   // Auto-generate URL-friendly slug only if title changed or slug is not yet set
   if (this.isModified("title") || !this.slug) {
-    this.slug = generateSlug(this.title);
+    const slug = generateSlug(this.title);
+    if (!slug) {
+      throw new Error("Title must contain at least one letter or number to generate a slug.");
+    }
+    this.slug = slug;
   }
 
   // Validate and normalize date to ISO format
