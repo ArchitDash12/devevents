@@ -1,9 +1,11 @@
-import EventCard from "@/components/EventCard";
+import { Suspense } from "react";
 import ExploreBtn from "@/components/ExploreBtn";
-import { events } from "@/lib/constants";
+import FeaturedEvents from "@/components/FeaturedEvents";
+import { cacheLife } from "next/cache";
 
-
-const page = () => {
+const page = async () => {
+  'use cache';
+  cacheLife('hours')
   return (
     <section>
       <h1 className="text-center">The Hub for Every Dev <br /> Event You Can&apos;t Miss</h1>
@@ -14,13 +16,9 @@ const page = () => {
       <div className="mt-20 space-y-7">
         <h3>Featured Events</h3>
 
-        <ul className="events list-none">
-          {events.map((event) => (
-            <li key={event.title} className="list-none">
-              <EventCard {...event}  />
-            </li>
-          ))}
-        </ul>
+        <Suspense fallback={<p>Loading events...</p>}>
+          <FeaturedEvents />
+        </Suspense>
       </div>
     </section>
   )
