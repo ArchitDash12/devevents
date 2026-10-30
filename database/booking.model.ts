@@ -6,6 +6,7 @@ import Event from "./event.model";
  */
 export interface IBooking {
   eventId: Types.ObjectId;
+  slug: string;
   email: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -20,6 +21,12 @@ const BookingSchema = new Schema<IBooking>(
       ref: "Event",
       required: [true, "Event ID is required"],
       index: true, // Index on eventId to optimize query performance when filtering bookings by event
+    },
+    slug: {
+      type: String,
+      required: [true, "Event slug is required"],
+      trim: true,
+      lowercase: true,
     },
     email: {
       type: String,
